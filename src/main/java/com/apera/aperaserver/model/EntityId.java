@@ -1,4 +1,4 @@
-package org.example;
+package com.apera.aperaserver.model;
 
 public class EntityId {
     private Long id;

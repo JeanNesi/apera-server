@@ -1,4 +1,4 @@
-package org.example;
+package com.apera.aperaserver.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

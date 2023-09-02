@@ -1,4 +1,4 @@
-package org.example;
+package com.apera.aperaserver.model;
 
 public enum Ativo {
     FUNDO_DE_INVESTIMENTO,

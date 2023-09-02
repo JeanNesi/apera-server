@@ -1,4 +1,4 @@
-package org.example;
+package com.apera.aperaserver.model;
 
 public class AtivoCompra extends EntityId {
     private Ativo ativoCompra;

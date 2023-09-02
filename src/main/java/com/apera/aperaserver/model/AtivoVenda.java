@@ -1,4 +1,4 @@
-package org.example;
+package com.apera.aperaserver.model;
 
 public class AtivoVenda extends EntityId {
     private Double valorVenda;

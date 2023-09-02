@@ -1,6 +1,4 @@
-package org.example;
-
-import java.io.DataOutput;
+package com.apera.aperaserver.model;
 
 public class Cliente extends Pessoa {
     private String cpf;

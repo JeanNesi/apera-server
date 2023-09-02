@@ -1,4 +1,4 @@
-package org.example;
+package com.apera.aperaserver.model;
 
 public class Pessoa extends EntityId {
     private String nome;
