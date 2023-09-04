@@ -1,29 +1,33 @@
 package com.apera.aperaserver.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
-public class Venda extends EntityId {
-    private List<AtivoVenda> ativo = new ArrayList<>();
-    private Double valorVenda;
-    private String descricao;
+public class Venda extends EntityId{
+    private LocalDate dataVenda;
+    private String observacao;
+    private Lancamento lancamento;
 
-    public List<AtivoVenda> getAtivo() {
-        return ativo;
+    public LocalDate getDataVenda() {
+        return dataVenda;
     }
-    public void setAtivo(List<AtivoVenda> ativo) {
-        this.ativo = ativo;
+
+    public void setDataVenda(LocalDate dataVenda) {
+        this.dataVenda = dataVenda;
     }
-    public Double getValorVenda() {
-        return valorVenda;
+
+    public String getObservacao() {
+        return observacao;
     }
-    public void setValorVenda(Double valorVenda) {
-        this.valorVenda = valorVenda;
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
-    public String getDescricao() {
-        return descricao;
+
+    public Lancamento getLancamento() {
+        return lancamento;
     }
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+
+    public void setLancamento(Lancamento lancamento) {
+        this.lancamento = lancamento;
     }
 }
