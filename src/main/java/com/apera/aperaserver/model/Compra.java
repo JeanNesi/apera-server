@@ -5,7 +5,6 @@ import java.time.LocalDate;
 public class Compra extends EntityId {
     private LocalDate dataCompra;
     private String observacao;
-
     private Lancamento lancamento;
 
     public LocalDate getDataCompra() {

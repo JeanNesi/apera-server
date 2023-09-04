@@ -2,9 +2,12 @@ package com.apera.aperaserver.model;
 
 public class Pessoa extends EntityId {
     private String nome;
+    private String cpf;
     private String dataNascimento;
     private Sexo sexo;
-    private String endereco;
+    private Endereco endereco;
+    private String telefone;
+    private Double renda;
 
     private Usuario usuario;
 
@@ -32,11 +35,11 @@ public class Pessoa extends EntityId {
         this.sexo = sexo;
     }
 
-    public String getEndereco() {
+    public Endereco getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(String endereco) {
+    public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
 
@@ -46,5 +49,29 @@ public class Pessoa extends EntityId {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public Double getRenda() {
+        return renda;
+    }
+
+    public void setRenda(Double renda) {
+        this.renda = renda;
     }
 }

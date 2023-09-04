@@ -4,11 +4,11 @@ import java.time.LocalDate;
 
 public class Lancamento extends EntityId {
     private Ativo ativo;
-    private Integer quantidade;
+    private Double quantidade;
     private Double custoExtra;
     private Double preco;
     private TipoAtivo tipoAtivo;
-    private Pessoa pessoa;
+    private TipoLancamento tipoLancamento;
 
     public Ativo getAtivo() {
         return ativo;
@@ -18,11 +18,11 @@ public class Lancamento extends EntityId {
         this.ativo = ativo;
     }
 
-    public Integer getQuantidade() {
+    public Double getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(Integer quantidade) {
+    public void setQuantidade(Double quantidade) {
         this.quantidade = quantidade;
     }
 
@@ -51,11 +51,11 @@ public class Lancamento extends EntityId {
         this.tipoAtivo = tipoAtivo;
     }
 
-    public Pessoa getPessoa() {
-        return pessoa;
+    public TipoLancamento getTipoLancamento() {
+        return tipoLancamento;
     }
 
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
+    public void setTipoLancamento(TipoLancamento tipoLancamento) {
+        this.tipoLancamento = tipoLancamento;
     }
 }
