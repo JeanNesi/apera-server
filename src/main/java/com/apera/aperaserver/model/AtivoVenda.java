@@ -3,8 +3,8 @@ package com.apera.aperaserver.model;
 public class AtivoVenda extends EntityId {
     private Double valorVenda;
     private Ativo ativoVenda;
-    private Double quantidade;
-    private String descricaoVenda;
+    private Int quantidade;
+    private Double custoExtra;
 
     public Double getValorVenda() {
         return valorVenda;
@@ -18,16 +18,18 @@ public class AtivoVenda extends EntityId {
     public void setAtivoVenda(Ativo ativoVenda) {
         this.ativoVenda = ativoVenda;
     }
-    public Double getQuantidade() {
+    public Int getQuantidade() {
         return quantidade;
     }
-    public void setQuantidade(Double quantidade) {
+    public void setQuantidade(Int quantidade) {
         this.quantidade = quantidade;
     }
-    public String getDescricaoVenda() {
-        return descricaoVenda;
+
+    public Double getCustoExtra() {
+        return custoExtra;
     }
-    public void setDescricaoVenda(String descricaoVenda) {
-        this.descricaoVenda = descricaoVenda;
+    public void setCustoExtra(Double custoExtra) {
+        this.custoExtra = custoExtra;
     }
+    
 }
