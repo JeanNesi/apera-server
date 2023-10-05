@@ -1,14 +1,27 @@
 package com.apera.aperaserver.model;
 
-public class Pessoa extends EntityId {
-    private String nome;
-    private String cpf;
-    private String dataNascimento;
-    private Sexo sexo;
-    private Endereco endereco;
-    private String telefone;
-    private Double renda;
+import javax.persistence.*;
 
+@Entity
+public class Pessoa extends EntityId {
+    @Column(name = "nome", length = 100, nullable = false)
+    private String nome;
+    @Column(name = "cpf", length = 14, nullable = false)
+    private String cpf;
+    @Column(name = "data_nascimento", length = 10, nullable = false)
+    private String dataNascimento;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sexo")
+    private Sexo sexo;
+    @OneToOne
+    @JoinColumn(name = "id_endereco")
+    private Endereco endereco;
+    @Column(name = "telefone", length = 11)
+    private String telefone;
+    @Column(name = "renda", nullable = false)
+    private Double renda;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
     public String getNome() {
