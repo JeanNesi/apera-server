@@ -1,13 +1,22 @@
 package com.apera.aperaserver.model;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 public class Lancamento extends EntityId {
+    @OneToOne
+    @JoinColumn(name = "ativo_id", nullable = false)
     private Ativo ativo;
+    @Column(name = "quantidade", length = 100, nullable = false)
     private Double quantidade;
+    @Column(name = "custoExtra", length = 100)
     private Double custoExtra;
+    @Column(name = "preco", length = 100, nullable = false)
     private Double preco;
+    @Column(name = "tipo_ativo", length = 100, nullable = false)
     private TipoAtivo tipoAtivo;
+    @Column(name = "tipo_lancamento", length = 100, nullable = false)
     private TipoLancamento tipoLancamento;
 
     public Ativo getAtivo() {

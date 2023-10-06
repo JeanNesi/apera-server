@@ -2,6 +2,8 @@ package com.apera.aperaserver.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
 @Entity
@@ -10,7 +12,8 @@ public class Compra extends EntityId {
     private LocalDate dataCompra;
     @Column(name = "observacao", length = 150)
     private String observacao;
-    @Column(name = "lancamento", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "lancamento_id")
     private Lancamento lancamento;
 
     public LocalDate getDataCompra() {

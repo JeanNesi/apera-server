@@ -20,7 +20,7 @@ public class Pessoa extends EntityId {
     private String telefone;
     @Column(name = "renda", nullable = false)
     private Double renda;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
