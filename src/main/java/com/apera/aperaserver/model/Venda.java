@@ -39,4 +39,5 @@ public class Venda extends EntityId{
     public void setLancamento(Lancamento lancamento) {
         this.lancamento = lancamento;
     }
+
 }

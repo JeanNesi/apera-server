@@ -1,7 +1,6 @@
 package com.apera.aperaserver.model;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 public class Lancamento extends EntityId {
@@ -42,7 +41,6 @@ public class Lancamento extends EntityId {
     public void setCustoExtra(Double custoExtra) {
         this.custoExtra = custoExtra;
     }
-
 
     public Double getPreco() {
         return preco;
