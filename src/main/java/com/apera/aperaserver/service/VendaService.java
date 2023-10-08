@@ -7,12 +7,15 @@ import com.apera.aperaserver.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
 public class VendaService {
     @Autowired
     private VendaRepository vendaRepository;
+
+    //Regra de negócio 4
     public String verificaQuantidadeVenda(Lancamento lancamento) throws QuantidadeVendaException {
         if (lancamento == null) {
             return "Lançamento está nulo";
@@ -29,6 +32,7 @@ public class VendaService {
         return null;
     }
 
+    @Transactional
     public String salvarVenda(Venda venda) throws QuantidadeVendaException {
         verificaQuantidadeVenda(venda.getLancamento());
         vendaRepository.save(venda);
