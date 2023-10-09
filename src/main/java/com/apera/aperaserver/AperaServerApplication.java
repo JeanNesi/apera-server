@@ -1,40 +1,41 @@
 package com.apera.aperaserver;
 
 import com.apera.aperaserver.model.*;
+import com.apera.aperaserver.service.CarteiraService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class AperaServerApplication {
 
-	public static void main(String[] args) throws QuantidadeVendaException {
+	public static void main(String[] args) {
 
-		// SpringApplication.run(AperaServerApplication.class, args);
-		Ativo ativo1 = new Ativo();
-		ativo1.setNome("MGLU3");
-		ativo1.setRazaoSocial("Magazine Luiza LTDA");
-		ativo1.setLogo("MAGALU");
-		ativo1.setDataValidade(LocalDate.of(2023, 10, 1));
+		Carteira carteira1 = new Carteira();
+		carteira1.setValorTotal(1000.0);
 
-		Lancamento lancamento1 = new Lancamento();
-		lancamento1.setAtivo(ativo1);
-		lancamento1.setQuantidade(2.0);
-		lancamento1.setCustoExtra(0.00);
-		lancamento1.setPreco(100.00);
-		lancamento1.setTipoAtivo(TipoAtivo.ACAO);
-		lancamento1.setTipoLancamento(TipoLancamento.COMPRA);
+		Carteira carteira2 = new Carteira();
+		carteira2.setValorTotal(500.0);
 
-		Lancamento lancamento2 = new Lancamento();
-		lancamento2.setAtivo(ativo1);
-		lancamento2.setQuantidade(3.0);
-		lancamento2.setCustoExtra(0.00);
-		lancamento2.setPreco(120.00);
-		lancamento2.setTipoAtivo(TipoAtivo.ACAO);
-		lancamento2.setTipoLancamento(TipoLancamento.VENDA);
+		Carteira carteira3 = new Carteira();
+		carteira3.setValorTotal(1500.0);
 
+		List<Carteira> carteiras = new ArrayList<>();
+		carteiras.add(carteira1);
+		carteiras.add(carteira2);
+		carteiras.add(carteira3);
+
+		CarteiraService carteiraService = new CarteiraService();
+
+		List<Carteira> carteirasOrdenadas = carteiraService.ordenarCarteirasPorValorTotal(carteiras);
+
+		for (Carteira carteira : carteirasOrdenadas) {
+			System.out.println("Valor Total da Carteira: " + carteira.getValorTotal());
+		}
+	}
 
 	}
 
-}
