@@ -42,7 +42,7 @@ utilizando pelo computador quanto pelo celular.
 
 - Java
 - Spring Boot
-- SQL Server
+- Postgresql
 
 ## Api utilizada
 
