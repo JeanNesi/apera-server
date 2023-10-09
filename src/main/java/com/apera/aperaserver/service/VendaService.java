@@ -10,12 +10,19 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
+//Regra de negócio 4
+/*Ao realizar um lançamento de venda, só deverá ser aceito a venda
+de quantidades menores ou iguais a quantidade da ação na carteira.*/
+
+//Regra de negócio 2
+/*Ao adicionar um novo lançamento na carteira, deverá ser adicionado
+um registro detalhado do lançamento, para exclusão ou edição posteriormente.*/
+
 @Service
 public class VendaService {
     @Autowired
     private VendaRepository vendaRepository;
 
-    //Regra de negócio 4
     public String verificaQuantidadeVenda(Lancamento lancamento) throws QuantidadeVendaException {
         if (lancamento == null) {
             return "Lançamento está nulo";
