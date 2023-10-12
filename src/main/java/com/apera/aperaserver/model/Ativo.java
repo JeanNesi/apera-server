@@ -14,7 +14,6 @@ public class Ativo extends EntityId {
     private String logo;
     @Column(name = "data_validade")
     private LocalDate dataValidade;
-
     @OneToOne(mappedBy = "ativo")
     private Lancamento lancamento;
 

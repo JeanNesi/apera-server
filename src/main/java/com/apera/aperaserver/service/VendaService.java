@@ -1,7 +1,7 @@
 package com.apera.aperaserver.service;
 
 import com.apera.aperaserver.model.Lancamento;
-import com.apera.aperaserver.model.QuantidadeVendaException;
+import com.apera.aperaserver.exceptions.QuantidadeVendaException;
 import com.apera.aperaserver.model.Venda;
 import com.apera.aperaserver.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +25,12 @@ public class VendaService {
 
     public String verificaQuantidadeVenda(Lancamento lancamento) throws QuantidadeVendaException {
         if (lancamento == null) {
-            return "Lançamento está nulo";
+            return "Lançamento está nulo"; // Criar exception para este tipo de erro?
         }
         Double quantidadeDesejada = lancamento.getQuantidade();
         Optional<Venda> vendaParametro = vendaRepository.findById(lancamento.getId());
         if (vendaParametro.isEmpty()) {
-            return "A venda está nula";
+            return "A venda está nula"; // Criar exception para este tipo de erro?
         }
         Double quantidadePossui = vendaParametro.get().getLancamento().getQuantidade();
         if(quantidadeDesejada > quantidadePossui) {
