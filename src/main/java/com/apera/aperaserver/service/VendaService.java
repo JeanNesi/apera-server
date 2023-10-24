@@ -1,13 +1,15 @@
 package com.apera.aperaserver.service;
 
-import com.apera.aperaserver.model.Lancamento;
-import com.apera.aperaserver.exceptions.QuantidadeVendaException;
+import com.apera.aperaserver.enterprise.ValidationException;
+import com.apera.aperaserver.enterprise.QuantidadeVendaException;
 import com.apera.aperaserver.model.Venda;
 import com.apera.aperaserver.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 //Regra de negócio 4
@@ -23,27 +25,33 @@ public class VendaService {
     @Autowired
     private VendaRepository vendaRepository;
 
-    public String verificaQuantidadeVenda(Lancamento lancamento) throws QuantidadeVendaException {
-        if (lancamento == null) {
-            return "Lançamento está nulo"; // Criar exception para este tipo de erro?
+    public Venda salvarVenda(Venda entity) throws QuantidadeVendaException {
+        if (entity.getLancamento() == null) {
+            throw new ValidationException("O lannçamento não pode ser nulo!");
         }
-        Double quantidadeDesejada = lancamento.getQuantidade();
-        Optional<Venda> vendaParametro = vendaRepository.findById(lancamento.getId());
+
+        Optional<Venda> vendaParametro = vendaRepository.findById(entity.getLancamento().getId());
+
         if (vendaParametro.isEmpty()) {
-            return "A venda está nula"; // Criar exception para este tipo de erro?
+            throw new ValidationException("A não pode ser nula!");
         }
+
+        Double quantidadeDesejada = entity.getLancamento().getQuantidade();
         Double quantidadePossui = vendaParametro.get().getLancamento().getQuantidade();
-        if(quantidadeDesejada > quantidadePossui) {
+
+        if (quantidadeDesejada > quantidadePossui) {
             throw new QuantidadeVendaException();
         }
-        return null;
+
+        return vendaRepository.save(entity);
     }
 
-    @Transactional
-    public String salvarVenda(Venda venda) throws QuantidadeVendaException {
-        verificaQuantidadeVenda(venda.getLancamento());
-        vendaRepository.save(venda);
-        return "Venda bem sucedida";
+    public List<Venda> buscarTodos(String filter) {
+        return vendaRepository.findAll(filter, Venda.class);
+    }
+
+    public Page<Venda> buscarTodos(String filter, Pageable pageable) {
+        return vendaRepository.findAll(filter, Venda.class, pageable);
     }
 
 }

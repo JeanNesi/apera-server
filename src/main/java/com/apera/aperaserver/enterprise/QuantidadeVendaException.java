@@ -1,4 +1,4 @@
-package com.apera.aperaserver.exceptions;
+package com.apera.aperaserver.enterprise;
 
 public class QuantidadeVendaException extends Exception{
     public QuantidadeVendaException() {
