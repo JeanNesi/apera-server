@@ -32,4 +32,10 @@ public class VendaController {
         Page<Venda> vendas = vendaService.buscarTodos(filter, PageRequest.of(page, size));
         return ResponseEntity.ok(vendas);
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity findById(@PathVariable("id") Long id) {
+        Venda venda = vendaService.buscarPorId(id);
+        return ResponseEntity.ok(venda);
+    }
 }

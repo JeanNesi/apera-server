@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class CompraService {
@@ -18,8 +19,12 @@ um registro detalhado do lançamento, para exclusão ou edição posteriormente.
     private CompraRepository compraRepository;
 
     @Transactional
-    public String salvarCompra(Compra compra) {
-        compraRepository.save(compra);
-        return "Compra bem sucedida";
+    public Compra salvarCompra(Compra entity) {
+        return compraRepository.save(entity);
     }
+
+    public List<Compra> buscarTodos() {
+        return compraRepository.findAll();
+    }
+
 }

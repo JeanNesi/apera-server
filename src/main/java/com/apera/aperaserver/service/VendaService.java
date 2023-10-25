@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class VendaService {
     @Autowired
     private VendaRepository vendaRepository;
 
+    @Transactional
     public Venda salvarVenda(Venda entity) throws QuantidadeVendaException {
         if (entity.getLancamento() == null) {
             throw new ValidationException("O lannçamento não pode ser nulo!");
@@ -52,6 +54,10 @@ public class VendaService {
 
     public Page<Venda> buscarTodos(String filter, Pageable pageable) {
         return vendaRepository.findAll(filter, Venda.class, pageable);
+    }
+
+    public Venda buscarPorId(Long id) {
+        return vendaRepository.findById(id).orElse(null);
     }
 
 }
