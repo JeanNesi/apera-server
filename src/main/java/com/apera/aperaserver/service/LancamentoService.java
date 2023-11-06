@@ -1,16 +1,13 @@
 package com.apera.aperaserver.service;
 
-import com.apera.aperaserver.model.Compra;
 import com.apera.aperaserver.model.Lancamento;
 import com.apera.aperaserver.repository.AtivoRepository;
 import com.apera.aperaserver.repository.CompraRepository;
 import com.apera.aperaserver.repository.LancamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.net.URI;
 
 
 //Regra de negócio 5

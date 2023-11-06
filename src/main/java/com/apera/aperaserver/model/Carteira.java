@@ -21,7 +21,7 @@ public class Carteira extends EntityId{
     @JoinColumn(name = "venda_id")
     private Venda historicoVendas;
 
-//    @OneToOne(mappedBy = "usuario")
+//    @OneToOne(mappedBy = "usuario") ver se faz sentido
 
     public Usuario getUsuario() {
         return usuario;

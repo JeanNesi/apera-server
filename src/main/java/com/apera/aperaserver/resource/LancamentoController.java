@@ -1,8 +1,6 @@
 package com.apera.aperaserver.resource;
 
-import com.apera.aperaserver.model.Compra;
 import com.apera.aperaserver.model.Lancamento;
-import com.apera.aperaserver.service.CompraService;
 import com.apera.aperaserver.service.LancamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
