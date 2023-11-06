@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 public class Lancamento extends EntityId {
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "ativo_id", nullable = false)
     private Ativo ativo;
     @Column(name = "quantidade", length = 100, nullable = false)
