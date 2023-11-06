@@ -1,23 +1,27 @@
 package com.apera.aperaserver.model;
 
 import javax.persistence.*;
-import java.util.List;
 @Entity
 @Table(name = "carteira")
 
 public class Carteira extends EntityId{
-    @Column(name = "usuario", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
-    @Column(name = "ativos")
-    private List<Ativo> ativos;
+    @OneToOne
+    @JoinColumn(name = "ativo_id")
+    private Ativo ativos;
     @Column(name = "valorTotal")
     private Double valorTotal;
-    @Column(name = "historicoCompras")
-    private List<Compra> historicoCompras;
-    @Column(name = "historicoVendas")
-    private List<Venda> historicoVendas;
+    @OneToOne
+    @JoinColumn(name = "compra_id")
+    private Compra historicoCompras;
 
-    @OneToOne(mappedBy = "usuario")
+    @OneToOne
+    @JoinColumn(name = "venda_id")
+    private Venda historicoVendas;
+
+//    @OneToOne(mappedBy = "usuario") ver se faz sentido
 
     public Usuario getUsuario() {
         return usuario;
@@ -27,11 +31,11 @@ public class Carteira extends EntityId{
         this.usuario = usuario;
     }
 
-    public List<Ativo> getAtivos() {
+    public Ativo getAtivos() {
         return ativos;
     }
 
-    public void setAtivos(List<Ativo> ativos) {
+    public void setAtivos(Ativo ativos) {
         this.ativos = ativos;
     }
 
@@ -43,19 +47,19 @@ public class Carteira extends EntityId{
         this.valorTotal = valorTotal;
     }
 
-    public List<Compra> getHistoricoCompras() {
+    public Compra getHistoricoCompras() {
         return historicoCompras;
     }
 
-    public void setHistoricoCompras(List<Compra> historicoCompras) {
+    public void setHistoricoCompras(Compra historicoCompras) {
         this.historicoCompras = historicoCompras;
     }
 
-    public List<Venda> getHistoricoVendas() {
+    public Venda getHistoricoVendas() {
         return historicoVendas;
     }
 
-    public void setHistoricoVendas(List<Venda> historicoVendas) {
+    public void setHistoricoVendas(Venda historicoVendas) {
         this.historicoVendas = historicoVendas;
     }
 

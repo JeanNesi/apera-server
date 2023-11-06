@@ -2,12 +2,12 @@ package com.apera.aperaserver.service;
 
 import com.apera.aperaserver.model.Lancamento;
 import com.apera.aperaserver.repository.AtivoRepository;
+import com.apera.aperaserver.repository.CompraRepository;
 import com.apera.aperaserver.repository.LancamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 
 //Regra de negócio 5
@@ -23,10 +23,13 @@ public class LancamentoService {
     private LancamentoRepository lancamentoRepository;
     @Autowired
     private AtivoRepository ativoRepository;
+    @Autowired
+    private CompraRepository compraRepository;
 
-    public void salvarLancamento(Lancamento lancamento) {
-        VerificaAtivoExistente(lancamento);
-        lancamentoRepository.save(lancamento);
+    @Transactional
+    public Lancamento salvarLancamento(Lancamento entity) {
+        // VerificaAtivoExistente(entity);
+        return lancamentoRepository.save(entity);
     }
 
     public String VerificaAtivoExistente(Lancamento lancamento) {
