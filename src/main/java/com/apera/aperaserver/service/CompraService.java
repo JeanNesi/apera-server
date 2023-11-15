@@ -27,4 +27,8 @@ um registro detalhado do lançamento, para exclusão ou edição posteriormente.
         return compraRepository.findAll();
     }
 
+    public Compra buscarPorId(Long id) {
+        return compraRepository.findById(id).orElse(null);
+    }
+
 }

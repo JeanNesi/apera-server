@@ -14,7 +14,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/vendas")
-public class VendaController {
+public class VendaController extends AbstractController {
     @Autowired
     private VendaService vendaService;
 

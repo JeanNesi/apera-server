@@ -4,31 +4,37 @@ import javax.persistence.*;
 @Entity
 @Table(name = "carteira")
 
-public class Carteira extends EntityId{
+public class Carteira extends EntityId {
     @OneToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "compra_id")
+    private Compra historicoCompra;
+    @ManyToOne
+    @JoinColumn(name = "venda_id")
+    private Venda historicoVenda;
+    @ManyToOne
     @JoinColumn(name = "ativo_id")
     private Ativo ativos;
-    @Column(name = "valorTotal")
+
+    @Column(name = "valor_total")
     private Double valorTotal;
-    @OneToOne
-    @JoinColumn(name = "compra_id")
-    private Compra historicoCompras;
 
-    @OneToOne
-    @JoinColumn(name = "venda_id")
-    private Venda historicoVendas;
-
-//    @OneToOne(mappedBy = "usuario") ver se faz sentido
-
-    public Usuario getUsuario() {
-        return usuario;
+    public Compra getHistoricoCompra() {
+        return historicoCompra;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setHistoricoCompra(Compra historicoCompra) {
+        this.historicoCompra = historicoCompra;
+    }
+
+    public Venda getHistoricoVenda() {
+        return historicoVenda;
+    }
+
+    public void setHistoricoVenda(Venda historicoVenda) {
+        this.historicoVenda = historicoVenda;
     }
 
     public Ativo getAtivos() {
@@ -45,32 +51,5 @@ public class Carteira extends EntityId{
 
     public void setValorTotal(Double valorTotal) {
         this.valorTotal = valorTotal;
-    }
-
-    public Compra getHistoricoCompras() {
-        return historicoCompras;
-    }
-
-    public void setHistoricoCompras(Compra historicoCompras) {
-        this.historicoCompras = historicoCompras;
-    }
-
-    public Venda getHistoricoVendas() {
-        return historicoVendas;
-    }
-
-    public void setHistoricoVendas(Venda historicoVendas) {
-        this.historicoVendas = historicoVendas;
-    }
-
-    @Override
-    public String toString() {
-        return "Carteira{" +
-                "usuario=" + usuario +
-                ", ativos=" + ativos +
-                ", valorTotal=" + valorTotal +
-                ", historicoCompras=" + historicoCompras +
-                ", historicoVendas=" + historicoVendas +
-                '}';
     }
 }
