@@ -1,8 +1,11 @@
 package com.apera.aperaserver.model;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public class EntityId {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -15,5 +18,6 @@ public class EntityId {
     public void setId(Long id) {
         this.id = id;
     }
+
 }
 

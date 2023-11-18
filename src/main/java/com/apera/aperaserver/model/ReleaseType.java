@@ -1,6 +1,6 @@
 package com.apera.aperaserver.model;
 
-public enum TipoLancamento {
+public enum ReleaseType {
     COMPRA,
     VENDA
 }
