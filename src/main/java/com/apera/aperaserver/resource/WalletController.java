@@ -2,8 +2,11 @@ package com.apera.aperaserver.resource;
 
 import com.apera.aperaserver.enterprise.NotFoundException;
 import com.apera.aperaserver.model.Wallet;
+import com.apera.aperaserver.resource.representation.WalletDTO;
 import com.apera.aperaserver.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +27,12 @@ public class WalletController extends AbstractController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        List<Wallet> carteiras = walletService.buscarTodos();
-        return ResponseEntity.ok(carteiras);
+    public ResponseEntity findAll(@RequestParam (required = false) String filter,
+                                  @RequestParam (defaultValue = "0") int page,
+                                  @RequestParam (defaultValue = "10") int size) {
+        Page<Wallet> carteiras = walletService.buscarTodos(filter, PageRequest.of(page, size));
+        Page<WalletDTO> carteiraDTO = WalletDTO.fromEntity(carteiras);
+        return ResponseEntity.ok(carteiraDTO);
     }
 
     @GetMapping("{id}")
@@ -47,10 +53,10 @@ public class WalletController extends AbstractController {
 
 
 
-//    @DeleteMapping("{id}")
-//    public ResponseEntity remove(@PathVariable("id") Long id) {
-//        walletService.remover(id);
-//        return ResponseEntity.noContent().build();
-//    }
+    @DeleteMapping("{id}")
+    public ResponseEntity remove(@PathVariable("id") Long id) {
+        walletService.remover(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
