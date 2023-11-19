@@ -3,6 +3,7 @@ package com.apera.aperaserver.service;
 import com.apera.aperaserver.enterprise.NotFoundException;
 import com.apera.aperaserver.model.QRelease;
 import com.apera.aperaserver.model.Release;
+import com.apera.aperaserver.model.ReleaseType;
 import com.apera.aperaserver.repository.ReleaseRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,36 +63,50 @@ public class ReleaseService {
     }
 
     @Transactional
-    public List<Map<String, Object>> groupReleasesByAsset(Long walletId) {
+    public Object groupReleasesByAsset(Long walletId) {
         List<Release> releases = findAllReleasesByWallet(walletId);
 
-        Map<String, List<Release>> lancamentosAgrupadosPorNome = releases.stream()
+        Map<String, List<Release>> groupedReleasesByName = releases.stream()
                 .collect(Collectors.groupingBy(release -> release.getAsset().getName()));
 
-        List<Map<String, Object>> result = new ArrayList<>();
-        for (Map.Entry<String, List<Release>> entry : lancamentosAgrupadosPorNome.entrySet()) {
-            List<Release> lancamentos = entry.getValue();
-            double somaQuantidadePreco = lancamentos.stream()
-                    .mapToDouble(l -> l.getAmount() * l.getPrice())
-                    .sum();
-            double somaQuantidades = lancamentos.stream()
-                    .mapToDouble(Release::getAmount)
-                    .sum();
 
-            double mediaPonderada = somaQuantidadePreco / somaQuantidades;
+        Map<String, Object> responseData = new HashMap<>();
+        List<Map<String, Object>> result = new ArrayList<>();
+        double valueApplied = 0;
+
+        for (Map.Entry<String, List<Release>> entry : groupedReleasesByName.entrySet()) {
+            List<Release> releasesList = entry.getValue();
+            double totalQuantity = 0;
+            double totalValue = 0;
+
+            for (Release release : releasesList) {
+                if (release.getReleaseType().equals(ReleaseType.COMPRA)) {
+                    totalQuantity += release.getAmount();
+                    totalValue += release.getAmount() * release.getPrice();
+                } else if (release.getReleaseType().equals(ReleaseType.VENDA)) {
+                    totalQuantity -= release.getAmount();
+                    totalValue -= release.getAmount() * release.getPrice();
+                }
+            }
+
+            valueApplied += totalValue;
+
+            double weightedAverage = totalQuantity != 0 ? totalValue / totalQuantity : 0;
 
             Map<String, Object> releaseInfo = new HashMap<>();
             releaseInfo.put("stock", entry.getKey());
-            releaseInfo.put("amount", somaQuantidades);
-            releaseInfo.put("averagePrice", mediaPonderada);
+            releaseInfo.put("amount", totalQuantity);
+            releaseInfo.put("averagePrice", weightedAverage);
+            releaseInfo.put("totalValue", totalValue);
 
             result.add(releaseInfo);
         }
 
-        return result;
+        responseData.put("stocks", result);
+        responseData.put("valueApplied", valueApplied);
+
+        return responseData;
     }
-
-
 
 
     public List<Release> buscarTodos(String filter) {

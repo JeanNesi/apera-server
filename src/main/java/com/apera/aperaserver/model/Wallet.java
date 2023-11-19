@@ -1,5 +1,6 @@
 package com.apera.aperaserver.model;
 
+import com.apera.aperaserver.enterprise.ResourceNotFoundException;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "wallet")
-public class Wallet extends EntityId{
+public class Wallet extends EntityId implements CheckRequiredFields{
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
@@ -18,7 +19,7 @@ public class Wallet extends EntityId{
     private List<Release> releases;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @CreatedDate
@@ -43,5 +44,12 @@ public class Wallet extends EntityId{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public void checkRequiredFields() {
+        if(user == null || name == null){
+            throw new ResourceNotFoundException("Campo obrigatório não fornecido.");
+        }
     }
 }

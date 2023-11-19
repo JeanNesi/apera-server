@@ -1,6 +1,8 @@
 package com.apera.aperaserver.resource;
 
 import com.apera.aperaserver.enterprise.NotFoundException;
+import com.apera.aperaserver.enterprise.ResourceNotFoundException;
+import com.apera.aperaserver.model.Release;
 import com.apera.aperaserver.model.Wallet;
 import com.apera.aperaserver.resource.representation.WalletDTO;
 import com.apera.aperaserver.service.WalletService;
@@ -15,16 +17,10 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/carteira")
+@RequestMapping("/api/wallet")
 public class WalletController extends AbstractController {
     @Autowired
     private WalletService walletService;
-
-    @PostMapping
-    public ResponseEntity create(@RequestBody @Valid Wallet entity) {
-        Wallet save = walletService.salvarCarteira(entity);
-        return ResponseEntity.created(URI.create("/api/carteira" + entity.getId())).body(save);
-    }
 
     @GetMapping
     public ResponseEntity findAll(@RequestParam (required = false) String filter,
@@ -35,27 +31,36 @@ public class WalletController extends AbstractController {
         return ResponseEntity.ok(carteiraDTO);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity findById(@PathVariable("id") Long id) {
-        Wallet carteira = walletService.buscarPorId(id);
-        return ResponseEntity.ok(carteira);
+
+    @GetMapping("/user")
+    public ResponseEntity user(@RequestParam(required = true) Long userId) {
+        return ResponseEntity.ok(walletService.findAllWalletByUser(userId));
+    }
+
+    @PostMapping
+    public ResponseEntity create(@RequestBody @Valid Wallet entity) {
+        try {
+            entity.checkRequiredFields();
+            Wallet save = walletService.createWallet(entity);
+            return ResponseEntity.created(URI.create("/api/wallet" + entity.getId())).body(save);
+        }catch (ResourceNotFoundException resourceNotFoundException){
+            return ResponseEntity.badRequest().body(resourceNotFoundException.getMessage());
+        }
     }
 
     @PutMapping("{id}")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody Wallet entity) {
         try {
-            Wallet alterada = walletService.alterar(id, entity);
-            return ResponseEntity.ok().body(alterada);
+            Wallet updatedWallet = walletService.updateWallet(id, entity);
+            return ResponseEntity.ok().body(updatedWallet);
         } catch (NotFoundException nfe) {
             return ResponseEntity.noContent().build();
         }
     }
 
-
-
     @DeleteMapping("{id}")
     public ResponseEntity remove(@PathVariable("id") Long id) {
-        walletService.remover(id);
+        walletService.deleteWallet(id);
         return ResponseEntity.noContent().build();
     }
 
