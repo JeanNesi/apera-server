@@ -17,7 +17,7 @@ public class JwtUtils {
     @Value("${apera.app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${apera.app.jwtExpirationMs}")
+    @Value("${apera.app.jwtExpirations}")
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {

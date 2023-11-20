@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Service
 public class RefreshTokenService {
-    @Value("${apera.app.jwtRefreshExpirationMs}")
+    @Value("${apera.app.jwtRefreshExpirations}")
     private Long refreshTokenDurationMs;
 
     @Autowired
