@@ -125,4 +125,8 @@ public class User extends EntityId {
         this.email = email;
         this.password = password;
     }
+
+    public User(){
+
+    }
 }
