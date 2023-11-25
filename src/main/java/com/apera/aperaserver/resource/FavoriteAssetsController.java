@@ -4,6 +4,7 @@ import com.apera.aperaserver.model.UserFavoriteAssets;
 import com.apera.aperaserver.resource.representation.FavoriteAssetsDTO;
 import com.apera.aperaserver.service.FavoriteAssetsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,28 +18,35 @@ import java.util.List;
 @RequestMapping("/api/favoriteAssets")
 public class FavoriteAssetsController {
     @Autowired
-    private FavoriteAssetsService favoriteAssetsService;
+    private @ReadOnlyProperty FavoriteAssetsService favoriteAssetsService;
+
     @PostMapping
     public ResponseEntity create(@RequestBody @Valid UserFavoriteAssets entity) {
         UserFavoriteAssets save = favoriteAssetsService.salvarAtivosFavoritos(entity);
         return ResponseEntity.created(URI.create("/api/favoriteAssets" + entity.getId())).body(save);
     }
+
     @GetMapping
     public ResponseEntity findAll(@RequestParam(required = false) String filter,
                                   @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "10") int size) {
-        Page<UserFavoriteAssets> ativosFavoritos = favoriteAssetsService.buscarTodos(filter, PageRequest.of(page, size));
-        Page<FavoriteAssetsDTO> favoriteAssetsDTOS = FavoriteAssetsDTO.fromEntity(ativosFavoritos);
+        var ativosFavoritos = favoriteAssetsService.buscarTodos(filter, PageRequest.of(page, size));
+        var favoriteAssetsDTOS = FavoriteAssetsDTO.fromEntity(ativosFavoritos);
+
         return ResponseEntity.ok(favoriteAssetsDTOS);
     }
+
     @GetMapping("{id}")
     public ResponseEntity findById(@PathVariable("id") Long id) {
-        UserFavoriteAssets userFavoriteAssets = favoriteAssetsService.buscarPorId(id);
+        var userFavoriteAssets = favoriteAssetsService.buscarPorId(id);
+
         return ResponseEntity.ok(userFavoriteAssets);
     }
+
     @DeleteMapping("{id}")
     public ResponseEntity deletar(@PathVariable("id") Long id) {
         favoriteAssetsService.deletar(id);
+
         return ResponseEntity.noContent().build();
     }
 }
