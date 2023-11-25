@@ -37,6 +37,7 @@ public class AperaServerApplication {
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setEnableTransactionSupport(true);
         template.setConnectionFactory(jedisConnectionFactory());
         return template;
     }
