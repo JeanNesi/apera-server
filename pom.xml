@@ -40,11 +40,11 @@
 			<artifactId>jedis</artifactId>
 			<version>3.7.0</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>com.microsoft.sqlserver</groupId>-->
-<!--			<artifactId>mssql-jdbc</artifactId>-->
-<!--			<scope>runtime</scope>-->
-<!--		</dependency>-->
+		<!--		<dependency>-->
+		<!--			<groupId>com.microsoft.sqlserver</groupId>-->
+		<!--			<artifactId>mssql-jdbc</artifactId>-->
+		<!--			<scope>runtime</scope>-->
+		<!--		</dependency>-->
 
 		<dependency>
 			<groupId>com.querydsl</groupId>
