@@ -74,7 +74,7 @@ public class UserRegistrationController extends AbstractController {
     }
 
     @GetMapping("/company")
-    public ResponseEntity findAllCompany(@RequestParam(defaultValue = "") String filter,
+    public ResponseEntity findAllCompany(@RequestParam(required = false) String filter,
                                          @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(defaultValue = "10") int size) {
         Page<Company> company = userRegistrationService.buscarTodasEmpresas(filter, PageRequest.of(page, size));

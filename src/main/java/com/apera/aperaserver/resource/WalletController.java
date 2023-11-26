@@ -23,7 +23,7 @@ public class WalletController extends AbstractController {
     private WalletService walletService;
 
     @GetMapping
-    public ResponseEntity findAll(@RequestParam (required = false) String filter,
+    public ResponseEntity findAll(@RequestParam (defaultValue = "") String filter,
                                   @RequestParam (defaultValue = "0") int page,
                                   @RequestParam (defaultValue = "10") int size) {
         Page<Wallet> carteiras = walletService.buscarTodos(filter, PageRequest.of(page, size));

@@ -62,7 +62,7 @@ public class ReleaseController extends AbstractController {
     }
 
     @GetMapping("/releases")
-    public ResponseEntity findAll(@RequestParam(required = false) String filter,
+    public ResponseEntity findAll(@RequestParam(defaultValue = "") String filter,
                                   @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "10") int size) {
 

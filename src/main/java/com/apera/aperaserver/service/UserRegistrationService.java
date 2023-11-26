@@ -6,13 +6,14 @@ import com.apera.aperaserver.repository.AddressRepository;
 import com.apera.aperaserver.repository.CompanyRepository;
 import com.apera.aperaserver.repository.PersonRepository;
 import com.apera.aperaserver.repository.UserRepository;
+import com.querydsl.jpa.impl.JPADeleteClause;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityManager;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -27,6 +28,9 @@ public class UserRegistrationService {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     public Person createPerson(Person entity) {
     User user = new User();
