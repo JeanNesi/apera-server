@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 public class ReleaseDTO {
     private Long id;
     private Asset asset;
-    private Double quantidade;
-    private Double preco;
+    private Double amount;
+    private Double price;
     private ReleaseType releaseType;
 
     public Long getId() {
@@ -32,51 +32,51 @@ public class ReleaseDTO {
         this.asset = asset;
     }
 
-    public Double getQuantidade() {
-        return quantidade;
+    public Double getAmount() {
+        return amount;
     }
 
-    public void setQuantidade(Double quantidade) {
-        this.quantidade = quantidade;
+    public void setQuantidade(Double amount) {
+        this.amount = amount;
     }
 
-    public Double getPreco() {
-        return preco;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setPreco(Double preco) {
-        this.preco = preco;
+    public void setPreco(Double price) {
+        this.price = price;
     }
 
-    public ReleaseType getTipoLancamento() {
+    public ReleaseType getReleaseType() {
         return releaseType;
     }
 
-    public void setTipoLancamento(ReleaseType releaseType) {
+    public void setReleaseType(ReleaseType releaseType) {
         this.releaseType = releaseType;
     }
 
     public ReleaseDTO() {
     }
 
-//    public static ReleaseDTO fromEntity(Release release) {
-//        ReleaseDTO releaseDTO = new ReleaseDTO();
-//        releaseDTO.setId(release.getId());
-//        releaseDTO.setAtivo(release.getAtivo());
-//        releaseDTO.setQuantidade(release.getQuantidade());
-//        releaseDTO.setPreco(release.getPreco());
-//        releaseDTO.setTipoLancamento(release.getTipoLancamento());
-//        return releaseDTO;
-//    }
+    public static ReleaseDTO fromEntity(Release release) {
+        ReleaseDTO releaseDTO = new ReleaseDTO();
+        releaseDTO.setId(release.getId());
+        releaseDTO.setAtivo(release.getAsset());
+        releaseDTO.setQuantidade(release.getAmount());
+        releaseDTO.setPreco(release.getPrice());
+        releaseDTO.setReleaseType(release.getReleaseType());
+        return releaseDTO;
+    }
 
-//    public static List<ReleaseDTO> fromEntity(List<Release> releases) {
-//        return releases.stream().map(lancamento -> fromEntity(lancamento)).collect(Collectors.toList());
-//    }
-//
-//    public static Page<ReleaseDTO> fromEntity(Page<Release> lancamentos) {
-//        List<ReleaseDTO> lancamentosFind = lancamentos.stream().map(lancamento -> fromEntity(lancamento)).collect(Collectors.toList());
-//        Page<ReleaseDTO> lancamentosDTO = new PageImpl<>(lancamentosFind, lancamentos.getPageable(), lancamentos.getTotalElements());
-//        return lancamentosDTO;
-//    }
+    public static List<ReleaseDTO> fromEntity(List<Release> releases) {
+        return releases.stream().map(lancamento -> fromEntity(lancamento)).collect(Collectors.toList());
+    }
+
+    public static Page<ReleaseDTO> fromEntity(Page<Release> releases) {
+        List<ReleaseDTO> realeasesFind = releases.stream().map(release -> fromEntity(release)).collect(Collectors.toList());
+        Page<ReleaseDTO> releaseDTO = new PageImpl<>(realeasesFind, releases.getPageable(), releases.getTotalElements());
+        return releaseDTO;
+    }
 
 }

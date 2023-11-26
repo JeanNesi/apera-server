@@ -116,6 +116,10 @@ public class ReleaseService {
         return releaseRepository.findAll(filter, Release.class, pageable);
     }
 
+    public Optional<Release> findReleaseById(Long id) {
+        return releaseRepository.findById(id);
+    }
+
 
     public Release updateRelease(Long id, Release entity) {
         Optional<Release> existingReleaseOptional = releaseRepository.findById(id);

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/release")
@@ -40,7 +41,7 @@ public class ReleaseController extends AbstractController {
             Release save = releaseService.createRelease(entity);
             return ResponseEntity.created(URI.create("/api/release" + entity.getId())).body(save);
         }catch (ResourceNotFoundException resourceNotFoundException){
-           return ResponseEntity.badRequest().body(resourceNotFoundException.getMessage());
+            return ResponseEntity.badRequest().body(resourceNotFoundException.getMessage());
         }
     }
 
@@ -65,21 +66,14 @@ public class ReleaseController extends AbstractController {
 //                                  @RequestParam(defaultValue = "0") int page,
 //                                  @RequestParam(defaultValue = "10") int size) {
 //
-//        Page<Release> lancamentos = releaseService.buscarTodos(filter, PageRequest.of(page, size));
-//        Page<ReleaseDTO> lancamentosDTOS = ReleaseDTO.fromEntity(lancamentos);
-//        return ResponseEntity.ok(lancamentosDTOS);
+//        Page<Release> releases = releaseService.buscarTodos(filter, PageRequest.of(page, size));
+//        Page<ReleaseDTO> releaseDTOS = ReleaseDTO.fromEntity(releases);
+//        return ResponseEntity.ok(releaseDTOS);
 //    }
 
-
-
-
-
-//    @GetMapping("{id}")
-//    public ResponseEntity findById(@PathVariable("id") Long id) {
-//        Release release = releaseService.buscarPorId(id);
-//        return ResponseEntity.ok(release);
-//    }
-
-
-
+    @GetMapping("{id}")
+    public ResponseEntity findById(@PathVariable("id") Long id) {
+        Optional<Release> release = releaseService.findReleaseById(id);
+        return ResponseEntity.ok(release);
+    }
 }
