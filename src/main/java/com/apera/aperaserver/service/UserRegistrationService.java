@@ -165,7 +165,7 @@ public class UserRegistrationService {
 
     @Transactional
     public Page<Company> buscarTodasEmpresas(String filter, Pageable pageable) {
-        return companyRepository.findAll(filter, Company.class, pageable);
+        return companyRepository.findAll(filter.replace(" ", "+"), Company.class, pageable);
     }
 
 }

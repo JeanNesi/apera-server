@@ -61,15 +61,15 @@ public class ReleaseController extends AbstractController {
         return ResponseEntity.noContent().build();
     }
 
-//    @GetMapping
-//    public ResponseEntity findAll(@RequestParam(required = false) String filter,
-//                                  @RequestParam(defaultValue = "0") int page,
-//                                  @RequestParam(defaultValue = "10") int size) {
-//
-//        Page<Release> releases = releaseService.buscarTodos(filter, PageRequest.of(page, size));
-//        Page<ReleaseDTO> releaseDTOS = ReleaseDTO.fromEntity(releases);
-//        return ResponseEntity.ok(releaseDTOS);
-//    }
+    @GetMapping("/releases")
+    public ResponseEntity findAll(@RequestParam(required = false) String filter,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size) {
+
+        Page<Release> releases = releaseService.buscarTodos(filter, PageRequest.of(page, size));
+        Page<ReleaseDTO> releaseDTOS = ReleaseDTO.fromEntity(releases);
+        return ResponseEntity.ok(releaseDTOS);
+    }
 
     @GetMapping("{id}")
     public ResponseEntity findById(@PathVariable("id") Long id) {

@@ -34,8 +34,8 @@ public class UserRegistrationController extends AbstractController {
 
     @GetMapping("/person")
     public ResponseEntity findAllPerson(@RequestParam(required = false) String filter,
-                                        @RequestParam(required = false) int page,
-                                        @RequestParam(required = false) int size) {
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "10") int size) {
         Page<Person> person = userRegistrationService.buscarTodasPessoas(filter, PageRequest.of(page, size));
         Page<PersonDTO> personDTOS = PersonDTO.fromEntity(person);
         return ResponseEntity.ok(personDTOS);
@@ -74,9 +74,9 @@ public class UserRegistrationController extends AbstractController {
     }
 
     @GetMapping("/company")
-    public ResponseEntity findAllCompany(@RequestParam(required = false) String filter,
-                                         @RequestParam(required = false) int page,
-                                         @RequestParam(required = false) int size) {
+    public ResponseEntity findAllCompany(@RequestParam(defaultValue = "") String filter,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size) {
         Page<Company> company = userRegistrationService.buscarTodasEmpresas(filter, PageRequest.of(page, size));
         Page<CompanyDTO> companyDTOS = CompanyDTO.fromEntity(company);
         return ResponseEntity.ok(companyDTOS);

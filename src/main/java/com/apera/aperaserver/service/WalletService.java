@@ -73,7 +73,7 @@ public class WalletService {
 
     @Transactional
     public Page<Wallet> buscarTodos(String filter, Pageable pageable) {
-        return walletRepository.findAll(filter, Wallet.class, pageable);
+        return walletRepository.findAll(filter.replace(" ", "+"), Wallet.class, pageable);
     }
 
 //    public List<Wallet> ordenarCarteirasPorValorTotal(List<Wallet> carteiras) {
