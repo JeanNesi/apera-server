@@ -2,6 +2,7 @@ package com.apera.aperaserver.service;
 
 import com.apera.aperaserver.enterprise.NotFoundException;
 import com.apera.aperaserver.model.*;
+import com.apera.aperaserver.repository.AddressRepository;
 import com.apera.aperaserver.repository.CompanyRepository;
 import com.apera.aperaserver.repository.PersonRepository;
 import com.apera.aperaserver.repository.UserRepository;
@@ -23,6 +24,9 @@ public class UserRegistrationService {
     private PersonRepository personRepository;
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     public Person createPerson(Person entity) {
     User user = new User();
@@ -54,13 +58,18 @@ public class UserRegistrationService {
 
         user = saveUser(user);
 
+        Address address = new Address();
+
+        address = saveAddress(address);
+
+
         Company company = new Company();
         company.setUser(user);
         company.setFantasyName(entity.getFantasyName());
         company.setPhoneNumber(entity.getPhoneNumber());
         company.setCnpj(entity.getCnpj());
         company.setCorporateReason(entity.getCorporateReason());
-        company.setAddress(entity.getAddress());
+        company.setAddress(address);
 
         company = saveCompany(company);
 
@@ -78,6 +87,11 @@ public class UserRegistrationService {
     @Transactional
     public Person savePerson(Person person) {
         return personRepository.save(person);
+    }
+
+    @Transactional
+    public Address saveAddress(Address address) {
+        return addressRepository.save(address);
     }
 
     public Page<Person> buscarTodasPessoas(String filter, Pageable pageable) {
