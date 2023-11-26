@@ -3,9 +3,7 @@ package com.apera.aperaserver.service;
 import com.apera.aperaserver.enterprise.NotFoundException;
 import com.apera.aperaserver.model.QRelease;
 import com.apera.aperaserver.model.QWallet;
-import com.apera.aperaserver.model.Release;
 import com.apera.aperaserver.model.Wallet;
-import com.apera.aperaserver.repository.ReleaseRepository;
 import com.apera.aperaserver.repository.WalletRepository;
 import com.querydsl.jpa.impl.JPADeleteClause;
 import org.modelmapper.ModelMapper;
@@ -17,10 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
 
 @Service
 public class WalletService {
@@ -39,6 +35,10 @@ public class WalletService {
         return (List<Wallet>) walletRepository.findAll(QWallet.wallet.user.id.eq(userId), Sort.by(Sort.Direction.ASC, "createdAt"));
     }
 
+    @Transactional
+    public Wallet findWalletById(Long id) {
+        return walletRepository.findById(id).orElse(null);
+    }
 
     @Transactional
     public Wallet createWallet(Wallet entity) {
@@ -64,10 +64,11 @@ public class WalletService {
         if (existingWalletOptional.isEmpty()) {
             throw new NotFoundException("Carteira não encontrada!");
         }
-//        QRelease release = QRelease.release;
-//        new JPADeleteClause(entityManager, release).where(release.wallet.eq(buscarPorId(id))).execute();
 
-        walletRepository.deleteById(id); // Tratar para caso não encontrar a Carteira
+        QRelease release = QRelease.release;
+        new JPADeleteClause(entityManager, release).where(release.wallet.eq(findWalletById(id))).execute();
+
+        walletRepository.deleteById(id);
     }
 
     @Transactional

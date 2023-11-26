@@ -2,6 +2,7 @@ package com.apera.aperaserver.resource;
 
 import com.apera.aperaserver.model.Company;
 import com.apera.aperaserver.model.Person;
+import com.apera.aperaserver.resource.representation.CompanyDTO;
 import com.apera.aperaserver.resource.representation.PersonDTO;
 import com.apera.aperaserver.service.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,9 @@ public class UserRegistrationController extends AbstractController {
     }
 
     @GetMapping("/person")
-    public ResponseEntity findAll(@RequestParam(required = false) String filter,
-                                  @RequestParam(required = false) int page,
-                                  @RequestParam(required = false) int size) {
+    public ResponseEntity findAllPerson(@RequestParam(required = false) String filter,
+                                        @RequestParam(required = false) int page,
+                                        @RequestParam(required = false) int size) {
         Page<Person> person = userRegistrationService.buscarTodasPessoas(filter, PageRequest.of(page, size));
         Page<PersonDTO> personDTOS = PersonDTO.fromEntity(person);
         return ResponseEntity.ok(personDTOS);
@@ -67,6 +68,27 @@ public class UserRegistrationController extends AbstractController {
         boolean deleted = userRegistrationService.deletePerson(id);
         if (deleted) {
             return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/company")
+    public ResponseEntity findAllCompany(@RequestParam(required = false) String filter,
+                                         @RequestParam(required = false) int page,
+                                         @RequestParam(required = false) int size) {
+        Page<Company> company = userRegistrationService.buscarTodasEmpresas(filter, PageRequest.of(page, size));
+        Page<CompanyDTO> companyDTOS = CompanyDTO.fromEntity(company);
+        return ResponseEntity.ok(companyDTOS);
+    }
+
+    @GetMapping("/company/{id}")
+    public ResponseEntity findCompanyByUserId(@RequestParam(required = false) Long userId) {
+        Optional<Company> companyOptional = userRegistrationService.findCompanyById(userId);
+
+        if (companyOptional.isPresent()) {
+            CompanyDTO companyDTO = CompanyDTO.fromEntity(companyOptional.get());
+            return ResponseEntity.ok(companyDTO);
         } else {
             return ResponseEntity.notFound().build();
         }
