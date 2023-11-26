@@ -1,6 +1,7 @@
 package com.apera.aperaserver.model;
 
 import com.apera.aperaserver.enterprise.ResourceNotFoundException;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -32,6 +33,7 @@ public class Release extends EntityId implements CheckRequiredFields {
     private Asset asset;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 

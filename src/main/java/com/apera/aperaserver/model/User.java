@@ -1,6 +1,7 @@
 package com.apera.aperaserver.model;
 
 import com.apera.aperaserver.model.security.Role;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -51,9 +52,11 @@ public class User extends EntityId {
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Wallet> wallets;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<UserFavoriteAssets> userFavoriteAssets;
 
     public String getUsername() {

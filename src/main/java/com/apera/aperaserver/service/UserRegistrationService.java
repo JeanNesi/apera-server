@@ -2,17 +2,16 @@ package com.apera.aperaserver.service;
 
 import com.apera.aperaserver.enterprise.NotFoundException;
 import com.apera.aperaserver.model.*;
-import com.apera.aperaserver.repository.AddressRepository;
-import com.apera.aperaserver.repository.CompanyRepository;
-import com.apera.aperaserver.repository.PersonRepository;
-import com.apera.aperaserver.repository.UserRepository;
+import com.apera.aperaserver.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -22,35 +21,19 @@ public class UserRegistrationService {
     private UserRepository userRepository;
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private WalletRepository walletRepository;
     @Autowired
     private CompanyRepository companyRepository;
 
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    PasswordEncoder encoder;
+
     public Person createPerson(Person entity) {
-    User user = new User();
-    user.setEmail(entity.getUser().getEmail());
-    user.setPassword(entity.getUser().getPassword());
-    user.setUsername(entity.getUser().getUsername());
-
-    user = saveUser(user);
-
-    Person person = new Person();
-    person.setUser(user);
-    person.setName(entity.getName());
-    person.setPhoneNumber(entity.getPhoneNumber());
-    person.setCpf(entity.getCpf());
-    person.setGender(entity.getGender());
-    person.setBirthDate(entity.getBirthDate());
-    person.setAddress(entity.getAddress());
-
-    person = savePerson(person);
-
-    return person;
-    }
-
-    public Company createCompany(Company entity) {
         User user = new User();
         user.setEmail(entity.getUser().getEmail());
         user.setPassword(entity.getUser().getPassword());
@@ -59,9 +42,43 @@ public class UserRegistrationService {
         user = saveUser(user);
 
         Address address = new Address();
+        address = saveAddress(address);
+
+        Wallet wallet = new Wallet();
+        wallet.setName("Carteira 1");
+        wallet.setUser(user);
+
+        Person person = new Person();
+        person.setUser(user);
+        person.setName(entity.getName());
+        person.setPhoneNumber(entity.getPhoneNumber());
+        person.setCpf(entity.getCpf());
+        person.setGender(entity.getGender());
+        person.setBirthDate(entity.getBirthDate());
+        person.setAddress(address);
+
+        person = savePerson(person);
+
+        return person;
+    }
+
+    public Company createCompany(Company entity) {
+        User user = new User();
+        user.setEmail(entity.getUser().getEmail());
+        user.setPassword(encoder.encode(entity.getUser().getPassword()));
+        user.setUsername(entity.getUser().getUsername());
+
+        user = saveUser(user);
+
+        Address address = new Address();
 
         address = saveAddress(address);
 
+        Wallet wallet = new Wallet();
+        wallet.setName("Carteira 1");
+        wallet.setUser(user);
+
+        saveWallet(wallet);
 
         Company company = new Company();
         company.setUser(user);
@@ -80,13 +97,20 @@ public class UserRegistrationService {
     public Company saveCompany(Company company) {
         return companyRepository.save(company);
     }
+
     @Transactional
     public User saveUser(User user) {
         return userRepository.save(user);
     }
+
     @Transactional
     public Person savePerson(Person person) {
         return personRepository.save(person);
+    }
+
+    @Transactional
+    public Wallet saveWallet(Wallet wallet) {
+        return walletRepository.save(wallet);
     }
 
     @Transactional
@@ -158,6 +182,7 @@ public class UserRegistrationService {
             throw new NotFoundException("Empresa não encontrada!");
         }
     }
+
     @Transactional
     public Optional<Company> findCompanyById(Long userId) {
         return companyRepository.findById(QCompany.company.user.id.eq(userId));

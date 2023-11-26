@@ -1,11 +1,15 @@
 package com.apera.aperaserver.resource.security;
 
+import com.apera.aperaserver.enterprise.ResourceNotFoundException;
 import com.apera.aperaserver.enterprise.TokenRefreshException;
+import com.apera.aperaserver.model.QWallet;
 import com.apera.aperaserver.model.User;
+import com.apera.aperaserver.model.Wallet;
 import com.apera.aperaserver.model.security.ERole;
 import com.apera.aperaserver.model.security.RefreshToken;
 import com.apera.aperaserver.model.security.Role;
 import com.apera.aperaserver.repository.UserRepository;
+import com.apera.aperaserver.repository.WalletRepository;
 import com.apera.aperaserver.repository.security.RefreshTokenService;
 import com.apera.aperaserver.repository.security.RoleRepository;
 import com.apera.aperaserver.resource.security.payload.request.LoginRequest;
@@ -17,9 +21,11 @@ import com.apera.aperaserver.resource.security.payload.response.TokenRefreshResp
 import com.apera.aperaserver.security.jwt.JwtUtils;
 import com.apera.aperaserver.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +51,9 @@ public class AuthController {
     RoleRepository roleRepository;
 
     @Autowired
+    WalletRepository walletRepository;
+
+    @Autowired
     PasswordEncoder encoder;
 
     @Autowired
@@ -55,26 +64,34 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
 
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+            List<Wallet> wallet = walletRepository.findAll(QWallet.wallet.user.id.eq(userDetails.getId())).stream().toList();
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                refreshToken.getToken(),
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles));
+            System.out.println("ai papai" + wallet);
+
+            return ResponseEntity.ok(new JwtResponse(jwt,
+                    refreshToken.getToken(),
+                    userDetails.getId(),
+                    userDetails.getUsername(),
+                    userDetails.getEmail(),
+                    roles, wallet));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("E-mail ou senha inválidos");
+        }
+
     }
 
     @PostMapping("/signup")

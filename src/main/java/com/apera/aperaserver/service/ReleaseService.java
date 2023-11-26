@@ -1,10 +1,9 @@
 package com.apera.aperaserver.service;
 
 import com.apera.aperaserver.enterprise.NotFoundException;
-import com.apera.aperaserver.model.QRelease;
-import com.apera.aperaserver.model.Release;
-import com.apera.aperaserver.model.ReleaseType;
+import com.apera.aperaserver.model.*;
 import com.apera.aperaserver.repository.ReleaseRepository;
+import com.apera.aperaserver.repository.WalletRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,13 +15,6 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-//Regra de negócio 5
-/* Ao adicionar um lançamento de compra,
-deverá ser feita uma verificação caso o ativo seja novo deverá criar um novo
-registro na carteira, caso o ativo adicionado já exista, o sistema deverá adicionar
-a quantidade ao registro já existente e recalcular o preço médio e o preço total do ativo.*/
-
 @Service
 public class ReleaseService {
 
@@ -31,30 +23,12 @@ public class ReleaseService {
     @Autowired
     private ReleaseRepository releaseRepository;
 
+    @Autowired
+    private WalletRepository walletRepository;
+
     @Transactional
     public Release createRelease(Release entity) {
-//        VerificaAtivoExistente(entity); // Adicionar verificação para salvar na table de compra ou venda também
         return releaseRepository.save(entity);
-    }
-
-//    public String VerificaAtivoExistente(Release release) {
-//        if (ativoRepository.existsById(release.getAtivo().getId())) {
-//            alterarQuantidadeCarteira(release.getId());
-//        }
-//        else {
-//            salvarAtivoCarteira(release.getId());
-//        }
-//        return null;
-//    }
-
-    @Transactional
-    public void salvarAtivoCarteira(Long ativo) {
-        // Salvar ativo na carteira do usuário;
-    }
-
-    @Transactional
-    public void alterarQuantidadeCarteira(Long ativo) {
-        // Alterar quantidade ativo na carteira do usuário
     }
 
     @Transactional
@@ -65,6 +39,7 @@ public class ReleaseService {
     @Transactional
     public Object groupReleasesByAsset(Long walletId) {
         List<Release> releases = findAllReleasesByWallet(walletId);
+        Optional<Wallet> wallet = walletRepository.findById(walletId);
 
         Map<String, List<Release>> groupedReleasesByName = releases.stream()
                 .collect(Collectors.groupingBy(release -> release.getAsset().getName()));
@@ -104,7 +79,7 @@ public class ReleaseService {
 
         responseData.put("stocks", result);
         responseData.put("valueApplied", valueApplied);
-
+        responseData.put("name", wallet.get().getName());
         return responseData;
     }
 

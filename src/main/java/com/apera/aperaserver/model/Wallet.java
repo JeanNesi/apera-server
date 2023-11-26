@@ -1,6 +1,7 @@
 package com.apera.aperaserver.model;
 
 import com.apera.aperaserver.enterprise.ResourceNotFoundException;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -19,6 +20,7 @@ public class Wallet extends EntityId implements CheckRequiredFields{
     private List<Release> releases;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -46,10 +48,46 @@ public class Wallet extends EntityId implements CheckRequiredFields{
         this.user = user;
     }
 
+
+    public List<Release> getReleases() {
+        return releases;
+    }
+
+    public void setReleases(List<Release> releases) {
+        this.releases = releases;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     @Override
     public void checkRequiredFields() {
         if(user == null || name == null){
             throw new ResourceNotFoundException("Campo obrigatório não fornecido.");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Wallet{" +
+                "name='" + name + '\'' +
+                ", releases=" + releases +
+                ", user=" + user +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }
