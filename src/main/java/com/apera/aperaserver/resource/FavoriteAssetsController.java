@@ -43,6 +43,18 @@ public class FavoriteAssetsController {
         return ResponseEntity.ok(userFavoriteAssets);
     }
 
+    @GetMapping("/user")
+    public ResponseEntity findAllByUser(@RequestParam(required = true) Long userId) {
+        return ResponseEntity.ok(favoriteAssetsService.findAllByUser(userId));
+    }
+
+    @GetMapping("/name/{name}/{userId}")
+    public ResponseEntity findByName(@PathVariable("name") String name, @PathVariable("userId") Long userId) {
+        var userFavoriteAssets = favoriteAssetsService.buscarPorNome(name, userId);
+        return ResponseEntity.ok(userFavoriteAssets);
+    }
+
+
     @DeleteMapping("{id}")
     public ResponseEntity deletar(@PathVariable("id") Long id) {
         favoriteAssetsService.deletar(id);

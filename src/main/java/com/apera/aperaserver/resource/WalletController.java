@@ -5,10 +5,12 @@ import com.apera.aperaserver.enterprise.ResourceNotFoundException;
 import com.apera.aperaserver.model.Release;
 import com.apera.aperaserver.model.Wallet;
 import com.apera.aperaserver.resource.representation.WalletDTO;
+import com.apera.aperaserver.resource.security.payload.response.MessageResponse;
 import com.apera.aperaserver.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,10 +33,9 @@ public class WalletController extends AbstractController {
         return ResponseEntity.ok(carteiraDTO);
     }
 
-
-    @GetMapping("/user")
-    public ResponseEntity user(@RequestParam(required = true) Long userId) {
-        return ResponseEntity.ok(walletService.findAllWalletByUser(userId));
+    @GetMapping("/user/{id}")
+    public ResponseEntity user(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(walletService.findAllWalletByUser(id));
     }
 
     @PostMapping
@@ -42,7 +43,7 @@ public class WalletController extends AbstractController {
         try {
             entity.checkRequiredFields();
             Wallet save = walletService.createWallet(entity);
-            return ResponseEntity.created(URI.create("/api/wallet" + entity.getId())).body(save);
+            return ResponseEntity.created(URI.create("/api/wallet" + entity.getId())).body(save.getId());
         }catch (ResourceNotFoundException resourceNotFoundException){
             return ResponseEntity.badRequest().body(resourceNotFoundException.getMessage());
         }
@@ -59,9 +60,19 @@ public class WalletController extends AbstractController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity remove(@PathVariable("id") Long id) {
-        walletService.deleteWallet(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity remove(@PathVariable("id") Long id, @RequestParam(required = true) Long userId) {
+        List<Wallet> wallet =  walletService.findAllWalletByUser(userId);
+
+
+
+        if(wallet.stream().count() > 1){
+            walletService.deleteWallet(id);
+            return ResponseEntity.ok().build();
+        }
+
+        System.out.println(wallet.stream().count() > 1);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não pode excluir sua única carteira");
     }
 
 }

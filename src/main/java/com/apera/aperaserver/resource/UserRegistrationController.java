@@ -2,8 +2,10 @@ package com.apera.aperaserver.resource;
 
 import com.apera.aperaserver.model.Company;
 import com.apera.aperaserver.model.Person;
+import com.apera.aperaserver.repository.UserRepository;
 import com.apera.aperaserver.resource.representation.CompanyDTO;
 import com.apera.aperaserver.resource.representation.PersonDTO;
+import com.apera.aperaserver.resource.security.payload.response.MessageResponse;
 import com.apera.aperaserver.service.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,16 +22,43 @@ public class UserRegistrationController extends AbstractController {
     @Autowired
     private UserRegistrationService userRegistrationService;
 
+    @Autowired
+    UserRepository userRepository;
+
     @PostMapping("/person")
     public ResponseEntity create(@RequestBody @Valid Person entity) {
+        if (userRepository.existsByUsername(entity.getUser().getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Username is already taken!"));
+        }
+
+        if (userRepository.existsByEmail(entity.getUser().getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+
         Person save = userRegistrationService.createPerson(entity);
         return ResponseEntity.created(URI.create("api/userRegistration" + entity.getId())).body(save);
     }
 
     @PostMapping("/company")
     public ResponseEntity create(@RequestBody @Valid Company entity) {
+        if (userRepository.existsByUsername(entity.getUser().getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Username is already taken!"));
+        }
+
+        if (userRepository.existsByEmail(entity.getUser().getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+
         Company save = userRegistrationService.createCompany(entity);
-        return ResponseEntity.created(URI.create(("api/userRegistration" + entity.getId()))).body(save);
+        return ResponseEntity.created(URI.create(("api/userRegistration" + entity.getId()))).body(save.getUser().getId());
     }
 
     @GetMapping("/person")

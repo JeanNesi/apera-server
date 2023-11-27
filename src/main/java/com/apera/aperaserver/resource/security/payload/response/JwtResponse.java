@@ -1,6 +1,8 @@
 package com.apera.aperaserver.resource.security.payload.response;
 
 
+import com.apera.aperaserver.model.Wallet;
+
 import java.util.List;
 
 public class JwtResponse {
@@ -11,14 +13,16 @@ public class JwtResponse {
     private String username;
     private String email;
     private List<String> roles;
+    private List<Wallet> wallets;
 
-    public JwtResponse(String accessToken, String refreshToken, Long id, String username, String email, List<String> roles) {
+    public JwtResponse(String accessToken, String refreshToken, Long id, String username, String email, List<String> roles, List<Wallet> wallets) {
         this.token = accessToken;
         this.id = id;
         this.username = username;
         this.email = email;
         this.roles = roles;
         this.refreshToken = refreshToken;
+        this.wallets = wallets;
     }
 
     public String getAccessToken() {
@@ -71,5 +75,33 @@ public class JwtResponse {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    public List<Wallet> getWallets() {
+        return wallets;
+    }
+
+    public void setWallets(List<Wallet> wallets) {
+        this.wallets = wallets;
     }
 }
