@@ -61,4 +61,5 @@ public class FavoriteAssetsController {
 
         return ResponseEntity.noContent().build();
     }
+
 }

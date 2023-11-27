@@ -62,7 +62,7 @@ public class UserRegistrationController extends AbstractController {
     }
 
     @GetMapping("/person")
-    public ResponseEntity findAllPerson(@RequestParam(required = false) String filter,
+    public ResponseEntity findAllPerson(@RequestParam(defaultValue = "") String filter,
                                         @RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "10") int size) {
         Page<Person> person = userRegistrationService.buscarTodasPessoas(filter, PageRequest.of(page, size));
@@ -103,7 +103,7 @@ public class UserRegistrationController extends AbstractController {
     }
 
     @GetMapping("/company")
-    public ResponseEntity findAllCompany(@RequestParam(required = false) String filter,
+    public ResponseEntity findAllCompany(@RequestParam(defaultValue = "") String filter,
                                          @RequestParam(defaultValue = "0") int page,
                                          @RequestParam(defaultValue = "10") int size) {
         Page<Company> company = userRegistrationService.buscarTodasEmpresas(filter, PageRequest.of(page, size));
@@ -112,7 +112,7 @@ public class UserRegistrationController extends AbstractController {
     }
 
     @GetMapping("/company/{id}")
-    public ResponseEntity findCompanyByUserId(@RequestParam(required = false) Long userId) {
+    public ResponseEntity findCompanyByUserId(@RequestParam(required = true) Long userId) {
         Optional<Company> companyOptional = userRegistrationService.findCompanyById(userId);
 
         if (companyOptional.isPresent()) {
