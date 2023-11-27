@@ -26,7 +26,7 @@ public class FavoriteAssetsService {
 
     @Transactional
     public Page<UserFavoriteAssets> buscarTodos(String filter, Pageable pageable) {
-        return favoriteAssetsRepository.findAll(filter, UserFavoriteAssets.class, pageable);
+        return favoriteAssetsRepository.findAll(filter.replace(" ", "+"), UserFavoriteAssets.class, pageable);
     }
 
     @Transactional

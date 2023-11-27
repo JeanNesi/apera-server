@@ -88,7 +88,7 @@ public class ReleaseService {
         return releaseRepository.findAll(filter, Release.class);
     }
     public Page<Release> buscarTodos(String filter, Pageable pageable) {
-        return releaseRepository.findAll(filter, Release.class, pageable);
+        return releaseRepository.findAll(filter.replace(" ", "+"), Release.class, pageable);
     }
 
     public Optional<Release> findReleaseById(Long id) {

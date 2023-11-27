@@ -9,9 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -30,7 +28,6 @@ public class UserRegistrationService {
     @Autowired
     private AddressRepository addressRepository;
 
-    @Autowired
     PasswordEncoder encoder;
 
     public Person createPerson(Person entity) {
@@ -190,7 +187,7 @@ public class UserRegistrationService {
 
     @Transactional
     public Page<Company> buscarTodasEmpresas(String filter, Pageable pageable) {
-        return companyRepository.findAll(filter, Company.class, pageable);
+        return companyRepository.findAll(filter.replace(" ", "+"), Company.class, pageable);
     }
 
 }
