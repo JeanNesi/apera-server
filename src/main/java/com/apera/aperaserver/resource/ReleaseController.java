@@ -6,11 +6,7 @@ import com.apera.aperaserver.model.Release;
 import com.apera.aperaserver.resource.representation.ReleaseDTO;
 import com.apera.aperaserver.service.ReleaseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,7 +21,9 @@ public class ReleaseController extends AbstractController {
 
     @GetMapping
     public ResponseEntity findAll(@RequestParam(required = true) Long walletId) {
-        return ResponseEntity.ok(releaseService.findAllReleasesByWallet(walletId));
+        List<Release> releases = releaseService.findAllReleasesByWallet(walletId);
+        List<ReleaseDTO> releaseDTOS = ReleaseDTO.fromEntity(releases);
+        return ResponseEntity.ok(releaseDTOS);
     }
 
     @GetMapping("/wallet")
@@ -39,8 +37,8 @@ public class ReleaseController extends AbstractController {
             entity.checkRequiredFields();
             Release save = releaseService.createRelease(entity);
             return ResponseEntity.created(URI.create("/api/release" + entity.getId())).body(save);
-        }catch (ResourceNotFoundException resourceNotFoundException){
-           return ResponseEntity.badRequest().body(resourceNotFoundException.getMessage());
+        } catch (ResourceNotFoundException resourceNotFoundException) {
+            return ResponseEntity.badRequest().body(resourceNotFoundException.getMessage());
         }
     }
 
@@ -71,15 +69,11 @@ public class ReleaseController extends AbstractController {
 //    }
 
 
-
-
-
 //    @GetMapping("{id}")
 //    public ResponseEntity findById(@PathVariable("id") Long id) {
 //        Release release = releaseService.buscarPorId(id);
 //        return ResponseEntity.ok(release);
 //    }
-
 
 
 }

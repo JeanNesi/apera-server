@@ -3,80 +3,103 @@ package com.apera.aperaserver.resource.representation;
 import com.apera.aperaserver.model.Asset;
 import com.apera.aperaserver.model.Release;
 import com.apera.aperaserver.model.ReleaseType;
+import com.apera.aperaserver.model.Wallet;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReleaseDTO {
-    private Long id;
-    private Asset asset;
-    private Double quantidade;
-    private Double preco;
+    private Double amount;
+    private Double extraCosts;
+    private Double price;
     private ReleaseType releaseType;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private AssetsDTO asset;
+    //private Wallet wallet;
 
-    public Long getId() {
-        return id;
+    public Double getAmount() {
+        return amount;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
-    public Asset getAtivo() {
-        return asset;
+    public Double getExtraCosts() {
+        return extraCosts;
     }
 
-    public void setAtivo(Asset asset) {
-        this.asset = asset;
+    public void setExtraCosts(Double extraCosts) {
+        this.extraCosts = extraCosts;
     }
 
-    public Double getQuantidade() {
-        return quantidade;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setQuantidade(Double quantidade) {
-        this.quantidade = quantidade;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
-    public Double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(Double preco) {
-        this.preco = preco;
-    }
-
-    public ReleaseType getTipoLancamento() {
+    public ReleaseType getReleaseType() {
         return releaseType;
     }
 
-    public void setTipoLancamento(ReleaseType releaseType) {
+    public void setReleaseType(ReleaseType releaseType) {
         this.releaseType = releaseType;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public AssetsDTO getAsset() {
+        return asset;
+    }
+
+    public void setAsset(AssetsDTO asset) {
+        this.asset = asset;
     }
 
     public ReleaseDTO() {
     }
 
-//    public static ReleaseDTO fromEntity(Release release) {
-//        ReleaseDTO releaseDTO = new ReleaseDTO();
-//        releaseDTO.setId(release.getId());
-//        releaseDTO.setAtivo(release.getAtivo());
-//        releaseDTO.setQuantidade(release.getQuantidade());
-//        releaseDTO.setPreco(release.getPreco());
-//        releaseDTO.setTipoLancamento(release.getTipoLancamento());
-//        return releaseDTO;
-//    }
+    public static ReleaseDTO fromEntity(Release release) {
+        ReleaseDTO releaseDTO = new ReleaseDTO();
+        releaseDTO.setAsset(AssetsDTO.fromEntity(release.getAsset()));
+        releaseDTO.setExtraCosts(release.getExtraCosts());
+        releaseDTO.setReleaseType(release.getReleaseType());
+        releaseDTO.setPrice(release.getPrice());
+        releaseDTO.setAmount(releaseDTO.getAmount());
+        releaseDTO.setUpdatedAt(release.getUpdatedAt());
+        releaseDTO.setCreatedAt(release.getCreatedAt());
+        return releaseDTO;
+    }
 
-//    public static List<ReleaseDTO> fromEntity(List<Release> releases) {
-//        return releases.stream().map(lancamento -> fromEntity(lancamento)).collect(Collectors.toList());
-//    }
-//
-//    public static Page<ReleaseDTO> fromEntity(Page<Release> lancamentos) {
-//        List<ReleaseDTO> lancamentosFind = lancamentos.stream().map(lancamento -> fromEntity(lancamento)).collect(Collectors.toList());
-//        Page<ReleaseDTO> lancamentosDTO = new PageImpl<>(lancamentosFind, lancamentos.getPageable(), lancamentos.getTotalElements());
-//        return lancamentosDTO;
-//    }
+    public static List<ReleaseDTO> fromEntity(List<Release> releases) {
+        return releases.stream().map(ReleaseDTO::fromEntity).collect(Collectors.toList());
+    }
 
 }

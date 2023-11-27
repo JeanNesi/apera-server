@@ -2,7 +2,6 @@ package com.apera.aperaserver.resource;
 
 import com.apera.aperaserver.enterprise.NotFoundException;
 import com.apera.aperaserver.enterprise.ResourceNotFoundException;
-import com.apera.aperaserver.model.Release;
 import com.apera.aperaserver.model.Wallet;
 import com.apera.aperaserver.resource.representation.WalletDTO;
 import com.apera.aperaserver.service.WalletService;
@@ -23,9 +22,9 @@ public class WalletController extends AbstractController {
     private WalletService walletService;
 
     @GetMapping
-    public ResponseEntity findAll(@RequestParam (required = false) String filter,
-                                  @RequestParam (defaultValue = "0") int page,
-                                  @RequestParam (defaultValue = "10") int size) {
+    public ResponseEntity findAll(@RequestParam(required = false) String filter,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size) {
         Page<Wallet> carteiras = walletService.buscarTodos(filter, PageRequest.of(page, size));
         Page<WalletDTO> carteiraDTO = WalletDTO.fromEntity(carteiras);
         return ResponseEntity.ok(carteiraDTO);
@@ -34,7 +33,9 @@ public class WalletController extends AbstractController {
 
     @GetMapping("/user")
     public ResponseEntity user(@RequestParam(required = true) Long userId) {
-        return ResponseEntity.ok(walletService.findAllWalletByUser(userId));
+        List<Wallet> wallets = walletService.findAllWalletByUser(userId);
+        List<WalletDTO> walletDTOS = WalletDTO.fromEntity(wallets);
+        return ResponseEntity.ok(walletDTOS);
     }
 
     @PostMapping
@@ -43,7 +44,7 @@ public class WalletController extends AbstractController {
             entity.checkRequiredFields();
             Wallet save = walletService.createWallet(entity);
             return ResponseEntity.created(URI.create("/api/wallet" + entity.getId())).body(save);
-        }catch (ResourceNotFoundException resourceNotFoundException){
+        } catch (ResourceNotFoundException resourceNotFoundException) {
             return ResponseEntity.badRequest().body(resourceNotFoundException.getMessage());
         }
     }
