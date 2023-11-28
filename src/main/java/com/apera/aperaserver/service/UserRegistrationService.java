@@ -28,12 +28,13 @@ public class UserRegistrationService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
     PasswordEncoder encoder;
 
     public Person createPerson(Person entity) {
         User user = new User();
         user.setEmail(entity.getUser().getEmail());
-        user.setPassword(entity.getUser().getPassword());
+        user.setPassword(encoder.encode(entity.getUser().getPassword()));
         user.setUsername(entity.getUser().getUsername());
 
         user = saveUser(user);
@@ -44,6 +45,8 @@ public class UserRegistrationService {
         Wallet wallet = new Wallet();
         wallet.setName("Carteira 1");
         wallet.setUser(user);
+
+        saveWallet(wallet);
 
         Person person = new Person();
         person.setUser(user);
