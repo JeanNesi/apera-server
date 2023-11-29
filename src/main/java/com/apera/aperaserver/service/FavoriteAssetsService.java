@@ -1,5 +1,6 @@
 package com.apera.aperaserver.service;
 
+import com.apera.aperaserver.enterprise.NotFoundException;
 import com.apera.aperaserver.model.QUser;
 import com.apera.aperaserver.model.QUserFavoriteAssets;
 import com.apera.aperaserver.model.UserFavoriteAssets;
@@ -20,6 +21,11 @@ public class FavoriteAssetsService {
 
     @Transactional
     public UserFavoriteAssets salvarAtivosFavoritos(UserFavoriteAssets entity) {
+      boolean assetCount = favoriteAssetsRepository.exists(QUserFavoriteAssets.userFavoriteAssets.asset.name.eq(entity.getAsset().getName()).and(QUserFavoriteAssets.userFavoriteAssets.user.id.eq(entity.getUser().getId())));
+
+      if(assetCount) {
+          throw new NotFoundException("Você já possui este ativo na lista de favoritos!");
+      }
         return favoriteAssetsRepository.save(entity);
     }
 

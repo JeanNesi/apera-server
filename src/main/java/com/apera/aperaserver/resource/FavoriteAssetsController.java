@@ -1,5 +1,6 @@
 package com.apera.aperaserver.resource;
 
+import com.apera.aperaserver.enterprise.NotFoundException;
 import com.apera.aperaserver.model.UserFavoriteAssets;
 import com.apera.aperaserver.resource.representation.FavoriteAssetsDTO;
 import com.apera.aperaserver.service.FavoriteAssetsService;
@@ -22,8 +23,13 @@ public class FavoriteAssetsController {
 
     @PostMapping
     public ResponseEntity create(@RequestBody @Valid UserFavoriteAssets entity) {
-        UserFavoriteAssets save = favoriteAssetsService.salvarAtivosFavoritos(entity);
-        return ResponseEntity.created(URI.create("/api/favoriteAssets" + entity.getId())).body(save);
+        try {
+            UserFavoriteAssets save = favoriteAssetsService.salvarAtivosFavoritos(entity);
+            return ResponseEntity.created(URI.create("/api/favoriteAssets" + entity.getId())).body(save);
+        } catch (NotFoundException notFoundException){
+            return ResponseEntity.badRequest().body(notFoundException.getMessage());
+        }
+
     }
 
     @GetMapping
