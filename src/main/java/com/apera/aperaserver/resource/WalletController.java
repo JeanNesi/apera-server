@@ -44,8 +44,8 @@ public class WalletController extends AbstractController {
             entity.checkRequiredFields();
             Wallet save = walletService.createWallet(entity);
             return ResponseEntity.created(URI.create("/api/wallet" + entity.getId())).body(save.getId());
-        }catch (ResourceNotFoundException resourceNotFoundException){
-            return ResponseEntity.badRequest().body(resourceNotFoundException.getMessage());
+        }catch (NotFoundException notFoundException){
+            return ResponseEntity.badRequest().body(notFoundException.getMessage());
         }
     }
 

@@ -42,6 +42,12 @@ public class WalletService {
 
     @Transactional
     public Wallet createWallet(Wallet entity) {
+       long userWalletsCount = walletRepository.count(QWallet.wallet.user.id.eq(entity.getUser().getId()));
+
+       if(userWalletsCount > 3){
+           throw new NotFoundException("Você já atingiu o limite máximo de carteiras!");
+       }
+
         return walletRepository.save(entity);
     }
 
