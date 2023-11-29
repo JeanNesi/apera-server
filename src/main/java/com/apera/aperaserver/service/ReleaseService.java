@@ -28,6 +28,25 @@ public class ReleaseService {
 
     @Transactional
     public Release createRelease(Release entity) {
+        List<Release> releases = findAllReleasesByWallet(entity.getWallet().getId());
+
+        double totalQuantityBuy = 0;
+        double totalQuantitySell = 0;
+
+        for (Release release : releases) {
+            if (release.getReleaseType().equals(ReleaseType.COMPRA)) {
+                totalQuantityBuy += release.getAmount();
+            } else if (release.getReleaseType().equals(ReleaseType.VENDA)) {
+                totalQuantitySell += release.getAmount();
+            }
+        }
+
+        double amount = totalQuantityBuy - totalQuantitySell;
+
+        if(entity.getReleaseType().equals(ReleaseType.VENDA) && entity.getAmount() > amount){
+            throw new NotFoundException("Você não possui quantidades suficentes deste ativo para a venda!");
+        }
+
         return releaseRepository.save(entity);
     }
 
@@ -68,13 +87,16 @@ public class ReleaseService {
 
             double weightedAverage = totalQuantity != 0 ? totalValue / totalQuantity : 0;
 
-            Map<String, Object> releaseInfo = new HashMap<>();
-            releaseInfo.put("stock", entry.getKey());
-            releaseInfo.put("amount", totalQuantity);
-            releaseInfo.put("averagePrice", weightedAverage);
-            releaseInfo.put("totalValue", totalValue);
+            if(totalQuantity > 0){
+                Map<String, Object> releaseInfo = new HashMap<>();
+                releaseInfo.put("stock", entry.getKey());
+                releaseInfo.put("amount", totalQuantity);
+                releaseInfo.put("averagePrice", weightedAverage);
+                releaseInfo.put("totalValue", totalValue);
 
-            result.add(releaseInfo);
+                result.add(releaseInfo);
+            }
+
         }
 
         responseData.put("stocks", result);

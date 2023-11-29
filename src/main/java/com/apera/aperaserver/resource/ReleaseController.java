@@ -40,8 +40,8 @@ public class ReleaseController extends AbstractController {
             entity.checkRequiredFields();
             Release save = releaseService.createRelease(entity);
             return ResponseEntity.created(URI.create("/api/release" + entity.getId())).body(save);
-        }catch (ResourceNotFoundException resourceNotFoundException){
-            return ResponseEntity.badRequest().body(resourceNotFoundException.getMessage());
+        }catch (NotFoundException notFoundException){
+            return ResponseEntity.badRequest().body(notFoundException.getMessage());
         }
     }
 
